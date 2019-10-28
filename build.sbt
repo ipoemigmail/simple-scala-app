@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "2.12.8"
+ThisBuild / scalaVersion := "2.12.9"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "ben.jeong"
 ThisBuild / organizationName := "ben.jeong"
@@ -14,14 +14,10 @@ lazy val root = (project in file("."))
   .settings(
     name := "simple-scala-app",
     resolvers ++= Seq("OSS" at "http://oss.sonatype.org/content/repositories/releases"),
-    libraryDependencies += "org.typelevel" %% "cats-effect" % Versions.catsEffect,
-    libraryDependencies ++= Seq(
-      "io.circe" %% "circe-core",
-      "io.circe" %% "circe-generic",
-      "io.circe" %% "circe-generic-extras",
-      "io.circe" %% "circe-parser"
-    ).map(_ % Versions.circe),
-    libraryDependencies += "org.scalacheck" %% "scalacheck" % Versions.scalaCheck % "test",
+    addCompilerPlugin(Deps.macrosParadise cross CrossVersion.full),
+    libraryDependencies += Deps.catsEffect,
+    libraryDependencies ++= Deps.circe,
+    libraryDependencies += Deps.scalaCheck % "test",
     scalacOptions ++= Seq(
       "-target:jvm-1.8",
       "-deprecation", // Emit warning and location for usages of deprecated APIs.
@@ -69,7 +65,8 @@ lazy val root = (project in file("."))
       "-Ywarn-unused:params", // Warn if a value parameter is unused.
       "-Ywarn-unused:patvars", // Warn if a variable bound in a pattern is unused.
       "-Ywarn-unused:privates", // Warn if a private member is unused.
-      "-Ywarn-value-discard" // Warn when non-Unit expression results are unused.
+      "-Ywarn-value-discard", // Warn when non-Unit expression results are unused.
+      //"-Xlog-implicits",
     ),
     javacOptions ++= Seq(
       "-source", "1.8", "-target", "1.8"
