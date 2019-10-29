@@ -17,6 +17,7 @@ lazy val root = (project in file("."))
     addCompilerPlugin(Deps.macrosParadise cross CrossVersion.full),
     libraryDependencies += Deps.catsEffect,
     libraryDependencies ++= Deps.circe,
+    libraryDependencies ++= Deps.http4s,
     libraryDependencies += Deps.scalaCheck % "test",
     scalacOptions ++= Seq(
       "-target:jvm-1.8",
