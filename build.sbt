@@ -16,8 +16,10 @@ lazy val root = (project in file("."))
     resolvers ++= Seq("OSS" at "http://oss.sonatype.org/content/repositories/releases"),
     addCompilerPlugin(Deps.macrosParadise cross CrossVersion.full),
     libraryDependencies += Deps.catsEffect,
+    libraryDependencies ++= Deps.enumeratum,
     libraryDependencies ++= Deps.circe,
     libraryDependencies ++= Deps.http4s,
+    libraryDependencies ++= Deps.sangria,
     libraryDependencies += Deps.scalaCheck % "test",
     scalacOptions ++= Seq(
       "-target:jvm-1.8",
