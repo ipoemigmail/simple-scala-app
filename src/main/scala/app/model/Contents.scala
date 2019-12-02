@@ -1,3 +1,3 @@
 package app.model
 
-case class Contents(`type`: ContentsType, text: String)
+case class Contents(kind: ContentsKind, text: String)

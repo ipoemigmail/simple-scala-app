@@ -1,19 +1,19 @@
 package app.scheme
 
-import app.model.{Activity, Contents, ContentsType, Permission}
+import app.model.{Activity, Contents, ContentsKind, Permission}
 import sangria.macros.derive._
 import sangria.schema.{EnumType, EnumValue, ObjectType}
 
-object ActivitySchemes {
+object ActivityType {
 
-  implicit val ActivityContentsScheme: ObjectType[Unit, Contents] =
+  implicit val ActivityContentsType: ObjectType[Unit, Contents] =
     deriveObjectType[Unit, Contents](
       ObjectTypeDescription("Contents"),
-      DocumentField("type", "Contents Type"),
+      DocumentField("kind", "Contents Kind"),
       DocumentField("text", "Contents Text")
     )
 
-  implicit val ActivityScheme: ObjectType[Unit, Activity] =
+  implicit val ActivityType: ObjectType[Unit, Activity] =
     deriveObjectType[Unit, Activity](
       ObjectTypeDescription("Activity"),
       DocumentField("id", "Id"),
@@ -21,13 +21,13 @@ object ActivitySchemes {
       DocumentField("permission", "Permission"),
     )
 
-  implicit val ContentsTypeScheme: EnumType[ContentsType] =
+  implicit val ContentsKindType: EnumType[ContentsKind] =
     EnumType(
-      "ContentsType",
-      Some("Contents Type"),
-      ContentsType.values.map(x => EnumValue(x.entryName, value = x)).toList
+      "ContentsKind",
+      Some("Contents Kind"),
+      ContentsKind.values.map(x => EnumValue(x.entryName, value = x)).toList
     )
 
-  implicit val PermissionScheme: EnumType[Permission] =
+  implicit val PermissionType: EnumType[Permission] =
     EnumType("Permission", Some("Permission"), Permission.values.map(x => EnumValue(x.entryName, value = x)).toList)
 }

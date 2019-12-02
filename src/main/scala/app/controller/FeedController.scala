@@ -1,6 +1,6 @@
 package app.controller
 
-import app.model.{Activity, Contents, ContentsType, Permission}
+import app.model.{Activity, Contents, ContentsKind, Permission}
 import cats.Monad
 import cats.implicits._
 
@@ -12,10 +12,10 @@ trait FeedController[F[_]] {
 object FeedController {
 
   val list: Map[String, Activity] = Map(
-    "1" -> Activity("1", List(Contents(ContentsType.text, "1")), Permission.all),
-    "2" -> Activity("2", List(Contents(ContentsType.text, "2")), Permission.all),
-    "3" -> Activity("3", List(Contents(ContentsType.text, "3")), Permission.all),
-    "4" -> Activity("4", List(Contents(ContentsType.image, "4")), Permission.all)
+    "1" -> Activity("1", List(Contents(ContentsKind.text, "1")), Permission.all),
+    "2" -> Activity("2", List(Contents(ContentsKind.text, "2")), Permission.all),
+    "3" -> Activity("3", List(Contents(ContentsKind.text, "3")), Permission.all),
+    "4" -> Activity("4", List(Contents(ContentsKind.image, "4")), Permission.all)
   )
 
   def apply[F[_]: Monad]: FeedController[F] = {

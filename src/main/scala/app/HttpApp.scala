@@ -3,7 +3,7 @@ package app
 import app.controller.FeedController
 import app.graphql.GraphQL
 import app.routes.{GraphQLRoutes, HelloRoutes, HiRoutes}
-import app.scheme.QueryScheme
+import app.scheme.QueryType
 import cats.effect._
 import cats.implicits._
 import org.http4s.HttpRoutes
@@ -22,7 +22,7 @@ trait HttpApp extends IOApp {
 
   val graphQL: GraphQL[IO] = GraphQL[IO].apply(
     Schema(
-      query = QueryScheme[IO]
+      query = QueryType[IO]
     ),
     ().pure[IO],
     bec

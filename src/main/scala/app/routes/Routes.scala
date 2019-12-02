@@ -1,4 +1,4 @@
-package app
+package app.routes
 
 import org.http4s.HttpRoutes
 
