@@ -4,13 +4,14 @@ import app.service.FeedService
 import app.graphql.GraphQL
 import app.repo.FeedRepo
 import app.routes.{GraphQLRoutes, HelloRoutes, HiRoutes}
-import app.scheme.QueryType
+import app.schema.QueryType
 import cats.effect._
 import cats.implicits._
 import org.http4s.HttpRoutes
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
+import sangria.renderer.QueryRenderer
 import sangria.schema.Schema
 
 import scala.concurrent.ExecutionContext._
@@ -29,6 +30,8 @@ trait HttpApp extends IOApp {
     ().pure[IO],
     bec
   )
+
+  println(QueryRenderer.render(QueryType[IO].toAst))
 
   val helloRoutes: HttpRoutes[IO] = HelloRoutes[IO]
   val hiRoutes: HttpRoutes[IO] = HiRoutes[IO]

@@ -1,4 +1,4 @@
-package app.scheme
+package app.schema
 
 import app.model.{Activity, Contents, ContentsKind, Permission}
 import sangria.macros.derive._

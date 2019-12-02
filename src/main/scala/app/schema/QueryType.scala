@@ -1,4 +1,4 @@
-package app.scheme
+package app.schema
 
 import app.service.FeedService
 import cats.effect.implicits._
