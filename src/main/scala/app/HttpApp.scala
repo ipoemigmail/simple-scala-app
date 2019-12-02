@@ -1,7 +1,8 @@
 package app
 
-import app.controller.FeedController
+import app.service.FeedService
 import app.graphql.GraphQL
+import app.repo.FeedRepo
 import app.routes.{GraphQLRoutes, HelloRoutes, HiRoutes}
 import app.scheme.QueryType
 import cats.effect._
@@ -18,7 +19,8 @@ import scala.concurrent.ExecutionContextExecutor
 trait HttpApp extends IOApp {
 
   implicit val bec: ExecutionContextExecutor = fromExecutor(java.util.concurrent.Executors.newFixedThreadPool(10))
-  implicit val feedController: FeedController[IO] = FeedController[IO]
+  implicit val feedRepo: FeedRepo[IO] = FeedRepo[IO]
+  implicit val feedService: FeedService[IO] = FeedService[IO]
 
   val graphQL: GraphQL[IO] = GraphQL[IO].apply(
     Schema(

@@ -1,6 +1,6 @@
 package app.scheme
 
-import app.controller.FeedController
+import app.service.FeedService
 import cats.effect.implicits._
 import cats.effect.{Effect, LiftIO}
 import sangria.schema.{ObjectType, _}
@@ -10,7 +10,7 @@ object QueryType {
 
   def apply[F[_]: Effect: LiftIO](
       implicit
-      feedController: FeedController[F]
+      feedController: FeedService[F]
   ): ObjectType[Unit, Unit] = {
 
     ObjectType(
