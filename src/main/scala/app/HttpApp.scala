@@ -18,11 +18,6 @@ import scala.concurrent.ExecutionContext._
 import scala.concurrent.ExecutionContextExecutor
 
 trait HttpApp extends IOApp {
-
-  implicit val bec: ExecutionContextExecutor = fromExecutor(java.util.concurrent.Executors.newFixedThreadPool(10))
-  implicit val feedRepo: FeedRepo[IO] = FeedRepo[IO]
-  implicit val feedService: FeedService[IO] = FeedService[IO]
-
   val graphQL: GraphQL[IO] = GraphQL[IO].apply(
     Schema(
       query = QueryType[IO]
@@ -31,12 +26,14 @@ trait HttpApp extends IOApp {
     bec
   )
 
-  println(QueryRenderer.render(QueryType[IO].toAst))
-
+  implicit val bec: ExecutionContextExecutor = fromExecutor(java.util.concurrent.Executors.newFixedThreadPool(10))
+  implicit val feedRepo: FeedRepo[IO] = FeedRepo[IO]
+  implicit val feedService: FeedService[IO] = FeedService[IO]
   val helloRoutes: HttpRoutes[IO] = HelloRoutes[IO]
+
+  println(QueryRenderer.render(QueryType[IO].toAst))
   val hiRoutes: HttpRoutes[IO] = HiRoutes[IO]
   val graphQLRoutes: HttpRoutes[IO] = GraphQLRoutes[IO](graphQL)
-
   val rootRoutes: HttpRoutes[IO] = helloRoutes <+> hiRoutes
 
   def run(args: List[String]): IO[ExitCode] =
@@ -49,4 +46,5 @@ trait HttpApp extends IOApp {
         .drain
     } yield ExitCode.Success
 
+  class IntString(int: Int, string: String)
 }

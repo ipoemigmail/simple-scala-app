@@ -20,7 +20,7 @@ object GraphQLRoutes {
       case req @ POST -> Root / "graphql" ⇒
         req.as[Json].flatMap(graphQL.query).flatMap {
           case Right(json) => Ok(json)
-          case Left(json) => BadRequest(json)
+          case Left(json)  => BadRequest(json)
         }
     }
   }

@@ -17,7 +17,6 @@ import scala.util.{Failure, Success}
 
 /** An algebra of operations in F that evaluate GraphQL requests. */
 trait GraphQL[F[_]] {
-
   /**
     * Executes a JSON-encoded request in the standard POST encoding, described thus in the spec:
     *
@@ -43,15 +42,16 @@ trait GraphQL[F[_]] {
     * @return either an error Json or result Json
     */
   def query(query: String, operationName: Option[String], variables: JsonObject): F[Either[Json, Json]]
-
 }
 
 object GraphQL {
-
   // Some circe lenses
   private val queryStringLens = root.query.string
   private val operationNameLens = root.operationName.string
   private val variablesLens = root.variables.obj
+
+  // Partially-applied constructor
+  def apply[F[_]] = new Partial[F]
 
   // Format a SyntaxError as a GraphQL `errors`
   private def formatSyntaxError(e: SyntaxError): Json =
@@ -62,7 +62,9 @@ object GraphQL {
           "locations" -> Json.arr(
             Json.obj(
               "line" -> Json.fromInt(e.originalError.position.line),
-              "column" -> Json.fromInt(e.originalError.position.column)))
+              "column" -> Json.fromInt(e.originalError.position.column)
+            )
+          )
         )
       )
     )
@@ -74,7 +76,8 @@ object GraphQL {
         Json.obj(
           "message" -> Json.fromString(v.errorMessage),
           "locations" -> Json.fromValues(
-            v.locations.map(loc => Json.obj("line" -> Json.fromInt(loc.line), "column" -> Json.fromInt(loc.column))))
+            v.locations.map(loc => Json.obj("line" -> Json.fromInt(loc.line), "column" -> Json.fromInt(loc.column)))
+          )
         )
       case v => Json.obj("message" -> Json.fromString(v.errorMessage))
     }))
@@ -85,14 +88,11 @@ object GraphQL {
   // Format a Throwable as a GraphQL `errors`
   private def formatThrowable(e: Throwable): Json =
     Json.obj(
-      "errors" -> Json.arr(
-        Json.obj("class" -> Json.fromString(e.getClass.getName), "message" -> Json.fromString(e.getMessage))))
-
-  // Partially-applied constructor
-  def apply[F[_]] = new Partial[F]
+      "errors" -> Json
+        .arr(Json.obj("class" -> Json.fromString(e.getClass.getName), "message" -> Json.fromString(e.getMessage)))
+    )
 
   final class Partial[F[_]] {
-
     // The rest of the constructor
     def apply[A](
         schema: Schema[A, Unit],
@@ -160,8 +160,6 @@ object GraphQL {
               case Left(err: WithViolations) => fail(formatWithViolations(err))
               case Left(err) => fail(formatThrowable(err))
             }
-
       }
   }
-
 }
